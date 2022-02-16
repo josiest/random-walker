@@ -1,42 +1,8 @@
 #pragma once
 
-#include <array>
-
-// a basic 2d spatial data type
-struct point {
-    int x, y;
-    inline point & operator+=(point const & rhs)
-    {
-        x += rhs.x;
-        y += rhs.y;
-        return *this;
-    }
-};
-
-namespace std {
-template<>
-struct hash<point> {
-    
-    size_t operator()(const point & p) const
-    {
-        return p.x ^ (p.y << 1);
-    }
-};
-}
-
-inline bool operator==(point const & lhs, point const & rhs)
-{
-    return lhs.x == rhs.x and lhs.y == rhs.y;
-}
-
-
-// the possible direction types
-namespace direction { enum name { up, left, down, right, size }; };
-
-// the directions as vectors
-inline std::array<point, 4> constexpr directions{
-    point{0, -1}, point{-1, 0}, point{0, 1}, point{1, 0}
-};
+// data types
+#include "point.hpp"
+#include "direction.hpp"
 
 // an adt for walking aimlessly!
 class walker {
