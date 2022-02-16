@@ -9,7 +9,8 @@
 #include "walker.hpp"
 #include <cstdint>
 
-// algorithms
+// math and algorithms
+#include <random>
 #include <algorithm>
 #include <ranges>
 
@@ -17,7 +18,7 @@
 using pointset = std::unordered_set<point>;
 namespace ranges = std::ranges;
 
-template<class engine_t>
+template<std::uniform_random_bit_generator engine_t>
 pointset walk(engine_t & rng, walker & homer, std::uint32_t N)
 {
     // create the resources for the random walk
