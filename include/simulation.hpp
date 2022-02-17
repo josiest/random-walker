@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <ranges>
 
+namespace random_walk {
+
 // aliases and namespaces
 using pointset = std::unordered_set<point>;
 namespace ranges = std::ranges;
@@ -36,4 +38,5 @@ pointset walk(engine_t & rng, walker & homer, std::uint32_t N)
     auto into_points = std::inserter(points, points.begin());
     ranges::generate_n(into_points, N, next_step);
     return points;
+}
 }

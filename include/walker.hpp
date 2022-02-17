@@ -4,6 +4,8 @@
 #include "point.hpp"
 #include "direction.hpp"
 
+namespace random_walk {
+
 // an adt for walking aimlessly!
 class walker {
 public:
@@ -25,3 +27,4 @@ public:
 private:
     point _position;
 };
+}

@@ -2,6 +2,7 @@
 
 #include <functional>
 
+namespace random_walk {
 // a basic 1d spatial data type
 struct point {
     int x, y;
@@ -13,18 +14,19 @@ struct point {
     }
 };
 
+inline bool operator==(point const & lhs, point const & rhs)
+{
+    return lhs.x == rhs.x and lhs.y == rhs.y;
+}
+}
+
 namespace std {
 template<>
-struct hash<point> {
+struct hash<random_walk::point> {
     
-    size_t operator()(const point & p) const
+    size_t operator()(const random_walk::point & p) const
     {
         return p.x ^ (p.y << 1);
     }
 };
-}
-
-inline bool operator==(point const & lhs, point const & rhs)
-{
-    return lhs.x == rhs.x and lhs.y == rhs.y;
 }
