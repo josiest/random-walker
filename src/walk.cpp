@@ -10,7 +10,11 @@
 // i/o
 #include <iostream>
 
-void print(point const & p)
+// aliases and namespaces
+namespace rw = random_walk;
+namespace ranges = std::ranges;
+
+void print(rw::point const & p)
 {
     std::cout << "{" << p.x << ", " << p.y << "}" << std::endl;
 }
@@ -20,9 +24,9 @@ int main()
     // resources for the walk
     std::random_device seed;
     std::mt19937 rng(seed());
-    walker homer; // homer will tell the simulation where he is at each step
+    rw::walker homer; // homer will tell the simulation where he is at each step
 
     // perform walk then print points
-    pointset points = walk(rng, homer, 100);
+    rw::pointset points = rw::walk(rng, homer, 100);
     ranges::for_each(points, print);
 }
