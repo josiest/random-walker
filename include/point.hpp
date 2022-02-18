@@ -63,7 +63,7 @@ namespace random_walk {
 template<spatial2 point_t>
 using pointset = std::unordered_set<point_t>;
 
-// a basic 1d spatial data type
+// a basic 2d spatial data type
 struct point {
     int x, y;
     point & operator+=(point const & q)
