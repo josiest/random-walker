@@ -6,13 +6,31 @@
 
 namespace random_walk {
 
+/** A spatial type of 2 dimensions.
+ * 
+ * A spatial2 type must satisfy the following requirements
+ * - copy constructible, and constructible from two numeric values
+ * - has public numeric members x and y with the same type
+ * - can increment itself by another object of the same type
+ *
+ * From these requirements, the following operations have been defined
+ * - equality, hashing, addition
+ */
 template<class point_t>
 concept spatial2 = requires(point_t p) {
+
+    // -- member requirements --
+    // point_t has an x member that's numeric
     p.x and std::is_arithmetic_v<std::remove_reference_t<decltype(p.x)>>;
-    p.y and std::is_arithmetic_v<std::remove_reference_t<decltype(p.y)>>;
-    std::is_same_v<decltype(p.x), decltype(p.y)>;
+    // point_t has a y member with the same type as x
+    p.y and std::is_same_v<decltype(p.x), decltype(p.y)>;
+
+    // -- constructor requirements --
+    // point_t is constructable from two numeric values
     point_t(p.x, p.y);
     std::copy_constructible<point_t>;
+
+    // -- operator requirements --
     { p += p } -> std::same_as<point_t&>;
 };
 
@@ -41,6 +59,7 @@ struct hash<point_t> {
 
 namespace random_walk {
 
+/** An unordered set of spatial2 objects. */
 template<spatial2 point_t>
 using pointset = std::unordered_set<point_t>;
 
