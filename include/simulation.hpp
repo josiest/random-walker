@@ -17,15 +17,14 @@
 namespace random_walk {
 
 // aliases and namespaces
-using pointset = std::unordered_set<point>;
 namespace ranges = std::ranges;
 
-template<std::uniform_random_bit_generator engine_t>
-pointset walk(engine_t & rng, walker & homer, std::uint32_t N)
+template<std::uniform_random_bit_generator engine_t, spatial2 point_t>
+pointset<point_t> walk(engine_t & rng, walker<point_t> & homer, std::uint32_t N)
 {
     // create the resources for the random walk
     direction_distribution random_direction(0, direction::size-1);
-    pointset points;
+    pointset<point_t> points;
     points.reserve(N);
 
     // have a random walker take a step in a random direction
