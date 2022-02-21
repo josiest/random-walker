@@ -92,7 +92,7 @@ target_link_libraries(<target> PUBLIC pcg::RandomWalk)
     - [`walker::position()`](#walkerposition)
     - [`walker::step()`](#walkerstep)
 - [simulation](#simulation)
-    - [`cardinal::uniform_walk(rng, start)`](#cardinaluniformwalkrng-start)
+    - [`cardinal::uniform_walk(rng, start)`](#cardinaluniform_walkrng-start)
 
 ## class walker
 An abstract data type for simulating random walks.
