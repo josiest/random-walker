@@ -93,6 +93,7 @@ target_link_libraries(<target> PUBLIC pcg::RandomWalk)
 
 ## Overview
 - [class walker](#class-walker)
+    - [constructors](#walker-constructors)
     - [`walker::position()`](#walkerposition)
     - [`walker::step()`](#walkerstep)
 - [simulation](#simulation)
@@ -106,18 +107,22 @@ An abstract data type for simulating random walks.
 template<sp::vector2 Vector> class walker;
 ```
 
-### Constructors
+### walker constructors
 
 ```cpp
 /** Create a random walker at the origin. */
-walker();
+template<sp::vector2 Vector>
+walker::walker();
 
 /** create a random walker at a specific point. */
-walker(int x, int y);
-walker(Vector const & p);
+template<sp::vector2 Vector>
+walker::walker(int x, int y);
+// prefer this constructor for type-deduction
+template<sp::vector2 Vector>
+walker::walker(Vector const & p);
 ```
 
-### Methods
+### walker methods
 
 ### walker::position()
 The walker's current position
