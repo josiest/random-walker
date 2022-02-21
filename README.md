@@ -73,6 +73,14 @@ sudo cmake --install .
 If you're on windows, you'll need to run `cmake --install .` as adminsitrator
 _instead_ of using `sudo`.
 
+At this point, if you're using cmake, you can add this to your `CMakeLists.txt`
+
+```cmake
+find_package(RandomWalk REQUIRED)
+...
+target_link_libraries(<target> PUBLIC pcg::RandomWalk)
+```
+
 # Documentation
 
 ## struct point
