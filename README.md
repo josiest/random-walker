@@ -60,6 +60,7 @@ Possible output:
 
 # Requirements
 - A compiler for C++20 or newer
+- [`spatula` library](https://github.com/josiest/spatula)
 
 # Installation
 Since this is a header-only library, all you _really_ need to do is to make sure
@@ -86,47 +87,20 @@ target_link_libraries(<target> PUBLIC pcg::RandomWalk)
 
 # Documentation
 
-## struct point
-A 2-dimensional point data structure.
+## Overview
+- [class walker](#class-walker)
+    - [`walker::position()`](#walkerposition)
+    - [`walker::step()`](#walkerstep)
+- [simulation](#simulation)
+    - [`cardinal::uniform_walk(rng, start)`](#cardinaluniformwalkrng-start)
 
-### Members
-`int x, y` the (x, y) coordinates
-
-### Defined Operations
-- addition, equality, hashing
-
-### Examples
-```cpp
-using namespace pcg;
-
-point const a(1, 2);
-point const b(3, 4);
-point const c = a + b;
-assert(c == point(4, 6));
-
-std::unordered_set<point> points{a, b, c};
-```
-
-## concept pcg::vector2
-A 2-dimensional vector concept.
- 
-### Requirements
-A vector2 type must satisfy the following requirements
-- copy constructible, and constructible from two numeric values
-- has public numeric members x and y with the same type
-
-### Examples
-```cpp
-auto dot(pcg::vector2 auto const & a, pcg::vector2 auto const & b)
-{
-    // use a's field type (as opposed to potentially b's instead)
-    using Field = std::remove_reference_t<decltype(a.x)>;
-    return static_cast<Field>(a.x*b.x + a.y*b.y);
-}
-```
-
-## template\<vector2 Vector\> class walker
+## class walker
 An abstract data type for simulating random walks.
+
+### Signature
+```cpp
+template<sp::vector2 Vector> class walker;
+```
 
 ### Constructors
 
@@ -141,17 +115,22 @@ walker(Vector const & p);
 
 ### Methods
 
-### Vector const & position() const
+### walker::position()
 The walker's current position
 
-### Vector const & step(direction)
+#### Signature
+```cpp
+template<sp::vector2 Vector>
+Vector const & walker<Vector>::postion() const;
+```
+
+### walker::step()
 Step the walker by one unit in the given direction.
 
 #### Signature
-
 ```cpp
 template<vector2 Vector>
-Vector const & walker::step(cardinal::direction_name direction);
+Vector const & walker<Vector>::step(cardinal::direction_name direction);
 ```
 
 #### Return
@@ -160,12 +139,15 @@ The walker's position after stepping.
 #### Parameters
 - `direction` the cardinal direction to walk in
 
-## auto pcg::cardinal::uniform_walk(rng, start)
+
+## simulation
+
+## cardinal::uniform_walk(rng, start)
 Make a function that generates points in a uniform-random walk.
 
 ### Signature
 ```cpp
-template<std::uniform_random_bit_generator Engine, vector2 Vector>
+template<std::uniform_random_bit_generator Engine, sp::vector2 Vector>
 auto pcg::cardinal::uniform_walk(Engine & rng, Vector const & start);
 ```
 

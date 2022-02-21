@@ -1,8 +1,7 @@
 #pragma once
 
 // data types
-#include "pcg/point.hpp"
-#include "pcg/direction.hpp"
+#include <spatula/geometry.hpp>
 
 namespace pcg::cardinal {
 
@@ -29,9 +28,9 @@ public:
      * Parameters
      *   direction - the cardinal direction to walk in
      */
-    inline Vector const & step(cardinal::direction_name direction)
+    inline Vector const & step(sp::cardinal::direction_name direction)
     {
-        _position = _position + cardinal::direction_as<Vector>(direction);
+        _position = _position + sp::cardinal::direction_as<Vector>(direction);
         return _position;
     }
 private:
