@@ -30,6 +30,7 @@ int main()
 
     // start at the origin of the grid
     pcg::point const origin(0, 0);
+    cardinal::walker homer(origin);
 
     // reserve enough space for all the points
     std::uint32_t const N = 10;
@@ -38,7 +39,7 @@ int main()
 
     // -- perform the simulation --
     auto into_points = std::inserter(points, points.begin());
-    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, origin));
+    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
     ranges::for_each(points, print_point);
 }
 ```
@@ -121,6 +122,41 @@ auto dot(pcg::vector2 auto const & a, pcg::vector2 auto const & b)
     return static_cast<Field>(a.x*b.x + a.y*b.y);
 }
 ```
+
+## template<vector2 Vector> class walker
+An abstract data type for simulating random walks.
+
+### Constructors
+
+```cpp
+/** Create a random walker at the origin. */
+walker();
+
+/** create a random walker at a specific point. */
+walker(int x, int y);
+walker(Vector const & p);
+```
+
+### Methods
+
+### Vector const & position() const
+The walker's current position
+
+### Vector const & step(direction)
+Step the walker by one unit in the given direction.
+
+#### Signature
+
+```cpp
+template<vector2 Vector>
+Vector const & walker::step(cardinal::direction_name direction);
+```
+
+#### Return
+The walker's position after stepping.
+
+#### Parameters
+- `direction` the cardinal direction to walk in
 
 ## auto pcg::cardinal::uniform_walk(rng, start)
 Make a function that generates points in a uniform-random walk.
