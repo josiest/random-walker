@@ -2,7 +2,7 @@
 
 A modern library for a classic algorithm. Simulate random walks easily.
 
-## Example usage
+# Example usage
 
 ```cpp
 #include <pcg/random_walk.hpp>
@@ -55,10 +55,10 @@ Possible output:
 (1, 0)
 ```
 
-## Requirements
+# Requirements
 - A compiler for C++20 or newer
 
-## Installation
+# Installation
 Since this is a header-only library, all you _really_ need to do is to make sure
 that the compiler can see the include path that has the source code.
 Alternatively, you can build it with cmake:
@@ -73,30 +73,30 @@ sudo cmake --install .
 If you're on windows, you'll need to run `cmake --install .` as adminsitrator
 _instead_ of using `sudo`.
 
-## Documentation
+# Documentation
 
-### concept pcg::vector2
+## concept pcg::vector2
 A 2-dimensional vector.
  
-#### Requirements
+### Requirements
 A vector2 type must satisfy the following requirements
 - copy constructible, and constructible from two numeric values
 - has public numeric members x and y with the same type
 
-### auto pcg::cardinal::uniform_walk(rng, start)
+## auto pcg::cardinal::uniform_walk(rng, start)
 Make a function that generates points in a uniform-random walk.
 
-#### Signature
+### Signature
 ```cpp
 template<std::uniform_random_bit_generator Engine, vector2 Vector>
 auto pcg::cardinal::uniform_walk(Engine & rng, Vector const & start);
 ```
 
-#### Return
+### Return
 A function that takes no arguments and returns a 2d point that's one step away
 from the last point generated in a uniformly-distributed random cardinal
 direction (North, East, South, West).
 
-#### Parameters
+### Parameters
 - `rng` the random number generator to sample from
 - `start` where the random walk should start from
