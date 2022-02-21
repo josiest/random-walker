@@ -2,7 +2,7 @@
 
 // abstract and pure data types
 #include <spatula/geometry.hpp>
-#include "pcg/walker.hpp"
+#include "simulacrum/random_walks/walker.hpp"
 #include <cstdint>
 
 // math and algorithms
@@ -10,7 +10,7 @@
 #include <algorithm>
 #include <ranges>
 
-namespace pcg {
+namespace simulacrum {
 
 /** Uniformly sample a random direction. */
 template<sp::ranged_enum Enum>
@@ -24,7 +24,7 @@ Enum uniform_enum(std::uniform_random_bit_generator auto & rng)
 
 }
 
-namespace pcg::cardinal {
+namespace simulacrum::cardinal {
 
 // aliases and namespaces
 namespace ranges = std::ranges;

@@ -3,7 +3,7 @@
 // data types
 #include <spatula/geometry.hpp>
 
-namespace pcg::cardinal {
+namespace simulacrum::cardinal {
 
 /** An abstract data type for simulating random walks. */
 template<vector2 Vector>
