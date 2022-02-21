@@ -26,16 +26,30 @@ TEST_CASE("walk-size: empty", "[single-file]")
     REQUIRE(points.empty());
 }
 
-// TEST_CASE("walk-size: one", "[single-file]")
-// {
-// 
-// }
-// 
-// TEST_CASE("walk-size: many", "[single-file]")
-// {
-// 
-// }
-// 
+TEST_CASE("walk-size: one", "[single-file]")
+{
+    std::mt19937 rng;
+    point origin(0, 0);
+
+    std::vector<point> points;
+    auto into_points = std::back_inserter(points);
+    ranges::generate_n(into_points, 1, cardinal::uniform_walk(rng, origin));
+
+    REQUIRE(points.size() == 1);
+}
+
+TEST_CASE("walk-size: many", "[single-file]")
+{
+    std::mt19937 rng;
+    point origin(0, 0);
+
+    std::vector<point> points;
+    auto into_points = std::back_inserter(points);
+    ranges::generate_n(into_points, 200, cardinal::uniform_walk(rng, origin));
+
+    REQUIRE(points.size() == 200);
+}
+
 // TEST_CASE("adjacency: two", "[single-file]")
 // {
 // 
