@@ -42,9 +42,9 @@ int main(int argc, char * argv[])
     pcg::point const origin(0, 0);
 
     // points will be written from the walk into this point set
-    pcg::pointset points;
+    std::vector<pcg::point> points;
     points.reserve(N);
-    auto into_points = std::inserter(points, points.begin());
+    auto into_points = std::back_inserter(points);
 
     // perform walk then print points
     ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, origin));
