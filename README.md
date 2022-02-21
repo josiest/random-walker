@@ -75,13 +75,44 @@ _instead_ of using `sudo`.
 
 # Documentation
 
+## struct point
+A 2-dimensional point data structure.
+
+### Members
+`int x, y` the (x, y) coordinates
+
+### Defined Operations
+- addition, equality, hashing
+
+### Examples
+```cpp
+using namespace pcg;
+
+point const a(1, 2);
+point const b(3, 4);
+point const c = a + b;
+assert(c == point(4, 6));
+
+std::unordered_set<point> points{a, b, c};
+```
+
 ## concept pcg::vector2
-A 2-dimensional vector.
+A 2-dimensional vector concept.
  
 ### Requirements
 A vector2 type must satisfy the following requirements
 - copy constructible, and constructible from two numeric values
 - has public numeric members x and y with the same type
+
+### Examples
+```cpp
+auto dot(pcg::vector2 auto const & a, pcg::vector2 auto const & b)
+{
+    // use a's field type (as opposed to potentially b's instead)
+    using Field = std::remove_reference_t<decltype(a.x)>;
+    return static_cast<Field>(a.x*b.x + a.y*b.y);
+}
+```
 
 ## auto pcg::cardinal::uniform_walk(rng, start)
 Make a function that generates points in a uniform-random walk.
@@ -100,3 +131,13 @@ direction (North, East, South, West).
 ### Parameters
 - `rng` the random number generator to sample from
 - `start` where the random walk should start from
+
+### Examples
+```cpp
+std::random_device seed;
+std::mt19937 rng(seed());
+
+pcg::point const origin(0, 0);
+std::array<pcg::point, 10> points;
+ranges::generate(points, pcg::cardinal::uniform_walk(rng, origin));
+```
