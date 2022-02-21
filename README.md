@@ -76,8 +76,6 @@ _instead_ of using `sudo`.
 ## Documentation
 
 ### concept pcg::vector2
-
-#### Brief
 A 2-dimensional vector.
  
 #### Requirements
@@ -86,6 +84,7 @@ A vector2 type must satisfy the following requirements
 - has public numeric members x and y with the same type
 
 ### auto pcg::cardinal::uniform_walk(rng, start)
+Make a function that generates points in a uniform-random walk.
 
 #### Signature
 ```cpp
@@ -96,8 +95,8 @@ auto pcg::cardinal::uniform_walk(Engine & rng, Vector const & start);
 #### Return
 A function that takes no arguments and returns a 2d point that's one step away
 from the last point generated in a uniformly-distributed random cardinal
-direction (left, right, up, down).
+direction (North, East, South, West).
 
 #### Parameters
-- **rng:** the random number generator to sample from
-- **start:** where the random walk should start from
+- `rng` the random number generator to sample from
+- `start` where the random walk should start from
