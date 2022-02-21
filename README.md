@@ -64,9 +64,9 @@ that the compiler can see the include path that has the source code.
 Alternatively, you can build it with cmake:
 
 ```sh
-mkdir build && cd build
+mkdir build
+cd build
 cmake ..
-cmake --build .
 sudo cmake --install .
 ```
 
