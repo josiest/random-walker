@@ -36,6 +36,8 @@ concept vector2 = requires(Vector p) {
 // a basic 2d spatial data type
 struct point {
     int x, y;
+    point() : x(0), y(0) {}
+    point(int x, int y) : x(x), y(y) {}
     point & operator+=(point const & q)
     {
         x += q.x;

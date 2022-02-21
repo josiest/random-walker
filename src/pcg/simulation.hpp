@@ -30,11 +30,10 @@ namespace cardinal {
  */
 template<vector2 Vector>
 auto uniform_walk(std::uniform_random_bit_generator auto & rng,
-                  Vector const & start)
+                  walker<Vector> & homer)
 {
     // return a generator function that will step in a random cardinal direction
-    return [&rng, &start]() {
-        static walker homer(start);
+    return [&rng, &homer]() {
         return homer.step(uniform_enum<cardinal::direction_name>(rng));
     };
 }
