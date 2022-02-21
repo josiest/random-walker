@@ -123,7 +123,7 @@ auto dot(pcg::vector2 auto const & a, pcg::vector2 auto const & b)
 }
 ```
 
-## template<vector2 Vector> class walker
+## template\<vector2 Vector\> class walker
 An abstract data type for simulating random walks.
 
 ### Constructors
