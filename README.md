@@ -107,7 +107,7 @@ An abstract data type for simulating random walks.
 template<sp::vector2 Vector> class walker;
 ```
 
-### walker constructors
+## walker constructors
 
 ```cpp
 /** Create a random walker at the origin. */
@@ -121,7 +121,7 @@ template<sp::vector2 Vector>              // prefer this constructor for
 walker<Vector>::walker(Vector const & p); // type-deduction
 ```
 
-#### Examples
+### Examples
 ```cpp
 #include <SFML/System.hpp>
 #include <pcg/random_walk.hpp>
@@ -136,30 +136,30 @@ sf::Vector2i const start(100, 100);
 walker w3(start);                   // walker at (100, 100)
 ```
 
-### walker methods
+## walker methods
 
-### walker::position()
+## walker::position()
 The walker's current position
 
-#### Signature
+### Signature
 ```cpp
 template<sp::vector2 Vector>
 Vector const & walker<Vector>::postion() const;
 ```
 
-### walker::step()
+## walker::step()
 Step the walker by one unit in the given direction.
 
-#### Signature
+### Signature
 ```cpp
 template<vector2 Vector>
 Vector const & walker<Vector>::step(cardinal::direction_name direction);
 ```
 
-#### Return
+### Return
 The walker's position after stepping.
 
-#### Parameters
+### Parameters
 - `direction` the cardinal direction to walk in
 
 
