@@ -31,7 +31,7 @@ public:
      */
     inline Vector const & step(cardinal::direction_name direction)
     {
-        _position += cardinal::direction_as<Vector>(direction);
+        _position = _position + cardinal::direction_as<Vector>(direction);
         return _position;
     }
 private:
