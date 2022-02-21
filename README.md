@@ -37,7 +37,7 @@ int main()
     std::mt19937 rng(seed());
 
     // start at the origin of the grid
-    pcg::point const origin(0, 0);
+    glm::ivec2 const origin(0, 0);
     cardinal::walker homer(origin);
 
     // reserve enough space for all the points
