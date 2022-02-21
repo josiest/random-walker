@@ -7,17 +7,23 @@ A modern library for a classic algorithm. Simulate random walks easily.
 # Example usage
 
 ```cpp
+
+// math and algorithms
 #include <pcg/random_walk.hpp>
 #include <random>
 #include <algorithm>
-#include <iterator>
+
+// data types
+#include <glm/glm.hpp>
 #include <cstdint>
+
+// i/o
 #include <iostream>
 
 namespace ranges = std::ranges;
 namespace cardinal = pcg::cardinal;
 
-void print_point(pcg::point const & p)
+void print_point(glm::ivec2 const & p)
 {
     std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
 }
@@ -35,12 +41,12 @@ int main()
     cardinal::walker homer(origin);
 
     // reserve enough space for all the points
-    std::uint32_t const N = 10;
-    pcg::pointset points;
+    std::uint32_t const N = 5;
+    std::vector<glm::ivec2> points;
     points.reserve(N);
 
     // -- perform the simulation --
-    auto into_points = std::inserter(points, points.begin());
+    auto into_points = std::back_inserter(points);
     ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
     ranges::for_each(points, print_point);
 }
@@ -49,13 +55,11 @@ int main()
 Possible output:
 
 ```
-(1, -2)
-(-1, -2)
-(0, -1)
+(0, 1)
+(1, 1)
+(0, 1)
 (0, 0)
-(1, -1)
-(0, -2)
-(1, 0)
+(0, -1)
 ```
 
 # Requirements
@@ -165,7 +169,7 @@ direction (North, East, South, West).
 std::random_device seed;
 std::mt19937 rng(seed());
 
-pcg::point const origin(0, 0);
-std::array<pcg::point, 10> points;
+glm::ivec2 const origin(0, 0);
+std::array<glm::ivec2, 10> points;
 ranges::generate(points, pcg::cardinal::uniform_walk(rng, origin));
 ```
