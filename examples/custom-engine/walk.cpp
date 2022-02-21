@@ -3,6 +3,7 @@
 #include <ctime>
 
 #include <pcg/random_walk.hpp>
+#include <glm/glm.hpp>
 #include <array>
 #include <algorithm>
 #include <random>
@@ -38,13 +39,7 @@ struct random_engine {
     }
 };
 
-struct point { int x; int y; };
-point operator+(point const & p, point const & q)
-{
-    return { p.x + q.x, p.y + q.y };
-}
-
-void print(point const & p)
+void print(glm::ivec2 const & p)
 {
     std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
 }
@@ -54,9 +49,9 @@ int main()
     random_engine rng{static_cast<std::size_t>(std::time(nullptr))};
 
     constexpr std::uint32_t N = 10;
-    std::array<point, N> points;
+    std::array<glm::ivec2, N> points;
 
-    point const origin(0, 0);
+    glm::ivec2 const origin(0, 0);
     cardinal::walker homer(origin);
 
     ranges::generate(points, cardinal::uniform_walk(rng, homer));
