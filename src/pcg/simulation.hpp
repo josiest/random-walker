@@ -26,16 +26,18 @@ namespace cardinal {
  * 
  * Parameters
  *  rng - the random number generator to sample from
- *  home - the random-walker that will take steps in 
+ *  start - where the random walk should start from
  */
 template<vector2 Vector>
 auto uniform_walk(std::uniform_random_bit_generator auto & rng,
-                  walker<Vector> & homer)
+                  Vector const & start)
 {
     // return a generator function that will step in a random cardinal direction
-    return [&rng, &homer]() {
+    return [&rng, &start]() {
+        static walker homer(start);
         return homer.step(uniform_enum<cardinal::directon_name>(rng));
     };
 }
+
 }
 }

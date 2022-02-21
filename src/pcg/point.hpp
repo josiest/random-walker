@@ -9,15 +9,11 @@
 
 namespace pcg {
 
-/** A spatial type of 2 dimensions.
+/** A 2-dimensional vector.
  * 
  * A vector2 type must satisfy the following requirements
  * - copy constructible, and constructible from two numeric values
  * - has public numeric members x and y with the same type
- * - can increment itself by another object of the same type
- *
- * From these requirements, the following operations have been defined
- * - equality, hashing, addition
  */
 template<class Vector>
 concept vector2 = requires(Vector p) {
