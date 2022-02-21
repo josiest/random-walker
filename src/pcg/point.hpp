@@ -33,10 +33,6 @@ concept vector2 = requires(Vector p) {
     { p + p } -> std::same_as<Vector>;
 };
 
-/** An unordered set of vector2 objects. */
-template<vector2 Vector>
-using pointset = std::unordered_set<Vector>;
-
 // a basic 2d spatial data type
 struct point {
     int x, y;
@@ -64,11 +60,16 @@ bool operator==(point const & p, point const & q)
 namespace std {
 template<>
 struct hash<pcg::point> {
-    size_t operator() const
+    size_t operator()(pcg::point const & p) const
     {
         using Field = decay_t<decltype(p.x)>;
         hash<Field> field_hash;
         return field_hash(p.x) ^ (field_hash(p.y) << 1);
     }
 };
+}
+
+namespace pcg {
+/** An unordered set of vector2 objects. */
+using pointset = std::unordered_set<point>;
 }

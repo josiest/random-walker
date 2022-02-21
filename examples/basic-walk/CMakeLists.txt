@@ -9,4 +9,4 @@ find_package(RandomWalk REQUIRED)
 file(GLOB sources *.cpp)
 
 add_executable(walk ${sources})
-include_directories(pcg::RandomWalk)
+target_link_libraries(walk PUBLIC pcg::RandomWalk)

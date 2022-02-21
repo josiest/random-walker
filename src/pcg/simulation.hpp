@@ -35,7 +35,7 @@ auto uniform_walk(std::uniform_random_bit_generator auto & rng,
     // return a generator function that will step in a random cardinal direction
     return [&rng, &start]() {
         static walker homer(start);
-        return homer.step(uniform_enum<cardinal::directon_name>(rng));
+        return homer.step(uniform_enum<cardinal::direction_name>(rng));
     };
 }
 
