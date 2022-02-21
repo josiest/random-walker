@@ -117,9 +117,23 @@ walker<Vector>::walker();
 /** create a random walker at a specific point. */
 template<sp::vector2 Vector>
 walker<Vector>::walker(int x, int y);
-// prefer this constructor for type-deduction
-template<sp::vector2 Vector>
-walker<Vector>::walker(Vector const & p);
+template<sp::vector2 Vector>              // prefer this constructor for
+walker<Vector>::walker(Vector const & p); // type-deduction
+```
+
+#### Examples
+```cpp
+#include <SFML/System.hpp>
+#include <pcg/random_walk.hpp>
+using namespace pcg;
+
+// ...
+
+walker<sf::Vector2i> w1;            // walker at the origin
+walker<sf::Vector2i> w2(100, 100);  // walker at (100, 100)
+
+sf::Vector2i const start(100, 100);
+walker w3(start);                   // walker at (100, 100)
 ```
 
 ### walker methods
