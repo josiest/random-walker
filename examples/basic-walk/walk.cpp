@@ -1,21 +1,18 @@
-// abstract and pure data types
-#include "point.hpp"
-#include "walker.hpp"
-
 // math and algorithms
 #include <random>
+#include <pcg/random_walk.hpp>
 #include <ranges>
-#include "simulation.hpp"
+#include <iterator>
 
 // i/o
 #include <iostream>
-#include <string>
 
 // aliases and namespaces
-namespace rw = random_walk;
 namespace ranges = std::ranges;
+namespace cardinal = pcg::cardinal;
 
-void print(rw::point const & p)
+struct point { int x; int y; };
+void print(point const & p)
 {
     std::cout << "{" << p.x << ", " << p.y << "}" << std::endl;
 }
@@ -40,11 +37,16 @@ int main(int argc, char * argv[])
     std::random_device seed;
     std::mt19937 rng(seed());
 
-    // homer will tell the simulation where he is at each step
-    rw::walker homer(rw::point::origin());
+    point const origin(0, 0);
+    cardinal::walker homer(origin);
+
+    // points will be written from the walk into this point set
+    pcg::pointset points;
+    points.reserve(N);
+    auto into_points = std::inserter(points, points.begin());
 
     // perform walk then print points
-    rw::pointset<rw::point> points = rw::walk(rng, homer, N);
+    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
     ranges::for_each(points, print);
     return EXIT_SUCCESS;
 }

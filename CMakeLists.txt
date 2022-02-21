@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(random-walker)
+project(basic-walk)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-file(GLOB sources src/*.cpp)
+file(GLOB sources include/pcg/*.cpp)
 
-add_executable(walk ${sources})
-include_directories(include)
+option(testing off)
+if (testing)
+    add_subdirectory(test)
+endif()
