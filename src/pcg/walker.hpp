@@ -1,13 +1,13 @@
 #pragma once
 
 // data types
-#include <spatula/vectors.hpp>
+#include "pcg/point.hpp"
 #include "pcg/direction.hpp"
 
 namespace pcg::cardinal {
 
 // an adt for walking aimlessly!
-template<spatula::vector2 Vector>
+template<vector2 Vector>
 class walker {
 public:
     // create a random walker at the origin

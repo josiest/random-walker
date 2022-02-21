@@ -24,7 +24,7 @@ namespace cardinal {
 enum direction_name { north, east, south, west, size };
 
 /** Get the vector associated with a cardinal direction. */
-template<spatula::vector2 Vector>
+template<vector2 Vector>
 constexpr Vector const &
 direction_as(direction_name dir)
 {
