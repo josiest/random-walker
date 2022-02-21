@@ -2,6 +2,8 @@
 
 A modern library for a classic algorithm. Simulate random walks easily.
 
+![random-maps](resources/all-maps.png)
+
 # Example usage
 
 ```cpp
