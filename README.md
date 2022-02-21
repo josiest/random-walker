@@ -112,14 +112,14 @@ template<sp::vector2 Vector> class walker;
 ```cpp
 /** Create a random walker at the origin. */
 template<sp::vector2 Vector>
-walker::walker();
+walker<Vector>::walker();
 
 /** create a random walker at a specific point. */
 template<sp::vector2 Vector>
-walker::walker(int x, int y);
+walker<Vector>::walker(int x, int y);
 // prefer this constructor for type-deduction
 template<sp::vector2 Vector>
-walker::walker(Vector const & p);
+walker<Vector>::walker(Vector const & p);
 ```
 
 ### walker methods
