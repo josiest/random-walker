@@ -60,6 +60,11 @@ configure_package_config_file(
     simulacrum-config.cmake.in simulacrum-config.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simulacrum)
 
+# allow exporting from build tree
+export(EXPORT simulacrum-targets
+       FILE ${CMAKE_CURRENT_BINARY_DIR}/simulacrum-targets.cmake
+       NAMESPACE sim::)
+
 # install the exported targets
 install(EXPORT simulacrum-targets
         FILE simulacrum-targets.cmake
