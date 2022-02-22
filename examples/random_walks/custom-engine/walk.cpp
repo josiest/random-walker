@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <ctime>
 
-#include <pcg/random_walk.hpp>
+#include <simulacrum/random_walks.hpp>
 #include <glm/glm.hpp>
 #include <array>
 #include <algorithm>
@@ -12,7 +12,7 @@
 #include <iostream>
 
 namespace ranges = std::ranges;
-namespace cardinal = pcg::cardinal;
+namespace cardinal = simulacrum::cardinal;
 
 struct random_engine {
     // I think this is a bug - gcc requires there to be a result_type
