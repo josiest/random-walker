@@ -44,10 +44,10 @@ template<sp::vector2 Vector>
 auto uniform_walk(std::uniform_random_bit_generator auto & rng,
                   walker<Vector> & homer)
 {
-    using uniform_direction = uniform_enum<sp::cardinal::direction_name>;
+    using cardinal_direction = sp::cardinal::direction_name;
     // return a generator function that will step in a random cardinal direction
     return [&rng, &homer]() {
-        return homer.step(uniform_direction(rng));
+        return homer.step(uniform_enum<cardinal_direction>(rng));
     };
 }
 

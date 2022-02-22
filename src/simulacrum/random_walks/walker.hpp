@@ -6,7 +6,7 @@
 namespace simulacrum::cardinal {
 
 /** An abstract data type for simulating random walks. */
-template<vector2 Vector>
+template<sp::vector2 Vector>
 class walker {
 public:
     /** Create a random walker at the origin. */
