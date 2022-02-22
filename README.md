@@ -86,7 +86,7 @@ At this point, if you're using cmake, you can add this to your `CMakeLists.txt`
 ```cmake
 find_package(simulacrum REQUIRED)
 ...
-target_link_libraries(<target> sim::simulacrom)
+target_link_libraries(<target> INTERFACE sim::simulacrom)
 ```
 
 # Documentation

@@ -8,4 +8,4 @@ find_package(simulacrum REQUIRED)
 file(GLOB sources *.cpp)
 
 add_executable(walk ${sources})
-target_link_libraries(walk sim::simulacrum)
+target_link_libraries(walk INTERFACE sim::simulacrum)
