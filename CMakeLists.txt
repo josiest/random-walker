@@ -1,18 +1,26 @@
 cmake_minimum_required(VERSION 3.18)
 
 #
-# Define the project and compiler settings
+# Define the library
 #
 
 project(simulacrum
         VERSION 1.0.0
         LANGUAGES CXX)
 
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
+# specify file interface
+set(simulacrum_SRCEXT hpp)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED true)
+# define the library and its aliases
+add_library(simulacrum INTERFACE)
+add_library(sim::simulacrum ALIAS simulacrum)
+set_target_properties(simulacrum PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED true)
+
+# link required external libraries
+find_package(spatula REQUIRED)
+target_link_libraries(simulacrum INTERFACE sp::spatula)
 
 # add test sub-directory if specified
 option(run_tests "Run tests" off)
@@ -21,23 +29,11 @@ if (run_tests)
 endif()
 
 #
-# Define the library
-#
-
-# specify file interface
-set(simulacrum_SRCEXT hpp)
-
-# define the library and its aliases
-add_library(simulacrum INTERFACE)
-add_library(sim::simulacrum ALIAS simulacrum)
-
-# link required external libraries
-find_package(spatula REQUIRED)
-target_link_libraries(simulacrum INTERFACE spatula)
-
-#
 # Export the library as a cmake package
 #
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 # define what directories to include
 target_include_directories(simulacrum INTERFACE
