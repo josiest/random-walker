@@ -78,15 +78,28 @@ cmake ..
 sudo cmake --install .
 ```
 
-If you're on windows, you'll need to run `cmake --install .` as adminsitrator
-_instead_ of using `sudo`.
-
 At this point, if you're using cmake, you can add this to your `CMakeLists.txt`
 
 ```cmake
 find_package(simulacrum REQUIRED)
 ...
 target_link_libraries(<target> INTERFACE sim::simulacrom)
+```
+
+### Windows Notes
+
+If you're on windows, you'll need to run `cmake --install .` as adminsitrator
+_instead_ of using `sudo`.
+
+Also, as of right now (February 2022), there seems to be a bug with CMake on
+Windows. The generated compile command likely won't include the necessary paths.
+In order to fix this, you can add this to your cmake file:
+
+```cmake
+find_package(spatula REQUIRED)
+get_target_property(simulacrum_includes sim::simulacrum INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(spatula_includes sp::spatula INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(<target> PRIVATE ${simulacrum_includes} ${spatula_includes})
 ```
 
 # Documentation
