@@ -1,17 +1,20 @@
 // math and algorithms
+#include <simulacrum/random_walks.hpp>
 #include <random>
-#include <pcg/random_walk.hpp>
 #include <ranges>
-#include <iterator>
 
 // i/o
 #include <iostream>
 
 // aliases and namespaces
 namespace ranges = std::ranges;
-namespace cardinal = pcg::cardinal;
+namespace cardinal = simulacrum::cardinal;
 
-void print(pcg::point const & p)
+struct point{ int x; int y; };
+point operator+(point const & p, point const & q) { return { p.x + q.x, p.y + q.y }; }
+bool operator==(point const & p, point const & q) { return p.x == q.x and p.y == q.y; }
+
+void print(point const & p)
 {
     std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
 }
@@ -39,11 +42,11 @@ int main(int argc, char * argv[])
     std::random_device seed;
     std::mt19937 rng(seed());
 
-    pcg::point const origin(0, 0);
+    point const origin(0, 0);
     cardinal::walker homer(origin);
 
     // points will be written from the walk into this point set
-    std::vector<pcg::point> points;
+    std::vector<point> points;
     points.reserve(N);
     auto into_points = std::back_inserter(points);
 
