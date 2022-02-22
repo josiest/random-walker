@@ -1,7 +1,7 @@
 // frameworks
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <pcg/random_walk.hpp>
+#include <simulacrum/random_walks.hpp>
 
 // data types and data structures
 #include <cstdint>
@@ -15,7 +15,7 @@
 // i/o
 #include <iostream>
 
-namespace cardinal = pcg::cardinal;
+namespace cardinal = simulacrum::cardinal;
 namespace ranges = std::ranges;
 
 auto as_pixel(std::uint32_t pixel_size)
