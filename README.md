@@ -1,6 +1,6 @@
-# random walks
+# simulacrum
 
-A modern library for a classic algorithm. Simulate random walks easily.
+A modern library for procedural content generation
 
 ![random-maps](resources/all-maps.png)
 
