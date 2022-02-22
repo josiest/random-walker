@@ -9,7 +9,7 @@ A modern library for a classic algorithm. Simulate random walks easily.
 ```cpp
 
 // math and algorithms
-#include <pcg/random_walk.hpp>
+#include <simulacrum/random_walks.hpp>
 #include <random>
 #include <algorithm>
 
@@ -21,7 +21,7 @@ A modern library for a classic algorithm. Simulate random walks easily.
 #include <iostream>
 
 namespace ranges = std::ranges;
-namespace cardinal = pcg::cardinal;
+namespace cardinal = simulacrum::cardinal;
 
 void print_point(glm::ivec2 const & p)
 {
@@ -84,9 +84,9 @@ _instead_ of using `sudo`.
 At this point, if you're using cmake, you can add this to your `CMakeLists.txt`
 
 ```cmake
-find_package(RandomWalk REQUIRED)
+find_package(simulacrum REQUIRED)
 ...
-target_link_libraries(<target> PUBLIC pcg::RandomWalk)
+target_link_libraries(<target> sim::simulacrom)
 ```
 
 # Documentation
@@ -124,8 +124,8 @@ walker<Vector>::walker(Vector const & p); // type-deduction
 ### Examples
 ```cpp
 #include <SFML/System.hpp>
-#include <pcg/random_walk.hpp>
-using namespace pcg;
+#include <simulacrum/random_walks.hpp>
+using namespace simulacrum;
 
 // ...
 
@@ -171,7 +171,7 @@ Make a function that generates points in a uniform-random walk.
 ### Signature
 ```cpp
 template<std::uniform_random_bit_generator Engine, sp::vector2 Vector>
-auto pcg::cardinal::uniform_walk(Engine & rng, Vector const & start);
+auto cardinal::uniform_walk(Engine & rng, Vector const & start);
 ```
 
 ### Return
@@ -185,10 +185,16 @@ direction (North, East, South, West).
 
 ### Examples
 ```cpp
+#include <glm/glm.hpp>
+#include <simulacrum/random_walks.hpp>
+namespace cardinal = simulacrum::cardinal;
+
+// ...
+
 std::random_device seed;
 std::mt19937 rng(seed());
 
 glm::ivec2 const origin(0, 0);
 std::array<glm::ivec2, 10> points;
-ranges::generate(points, pcg::cardinal::uniform_walk(rng, origin));
+ranges::generate(points, cardinal::uniform_walk(rng, origin));
 ```
