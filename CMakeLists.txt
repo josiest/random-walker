@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(random-walk VERSION 1.0.0)
+#
+# Define the project and compiler settings
+#
+
+project(simulacrum
+        VERSION 1.0.0
+        LANGUAGES CXX)
+
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
@@ -11,65 +20,61 @@ if (run_tests)
     add_subdirectory(test)
 endif()
 
-# --- create library ---
+#
+# Define the library
+#
 
 # specify file interface
-include(GNUInstallDirs)
-set(random-walk_SRCEXT hpp)
+set(simulacrum_SRCEXT hpp)
 
-add_library(random-walk INTERFACE)
-add_library(pcg::random-walk ALIAS random-walk)
+# define the library and its aliases
+add_library(simulacrum INTERFACE)
+add_library(sim::simulacrum ALIAS simulacrum)
 
+# link required external libraries
 find_package(spatula REQUIRED)
-target_link_libraries(random-walk INTERFACE sp::geometry)
+target_link_libraries(simulacrum INTERFACE spatula)
 
-target_include_directories(random-walk INTERFACE
-    $<BUILD_INTERFACE:${random-walk_SOURCE_DIR}/src>
+#
+# Export the library as a cmake package
+#
+
+# define what directories to include
+target_include_directories(simulacrum INTERFACE
+    $<BUILD_INTERFACE:${simulacrum_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-# -- export library --
-
-# install the target and create the export set
-install(TARGETS random-walk
-        EXPORT random-walkTargets
+# create the export targets
+install(TARGETS simulacrum
+        EXPORT simulacrum-targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-# --- create package for library ---
-
-# include helper functions for creating config files
-include(CMakePackageConfigHelpers)
-
+# create the package-version
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/random-walkConfigVersion.cmake
-    VERSION ${random-walk_VERSION}
+    ${CMAKE_CURRENT_BINARY_DIR}/simulacrum-config-version.cmake
+    VERSION ${simulacrum_VERSION}
     COMPATIBILITY AnyNewerVersion)
 
 # generate the package configuration file
 configure_package_config_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-    random-walkConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/random-walk)
-
-# allow exporting from build tree
-export(EXPORT random-walkTargets
-       FILE ${CMAKE_CURRENT_BINARY_DIR}/random-walkTargets.cmake
-       NAMESPACE pcg::)
+    simulacrum-config.cmake.in simulacrum-config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simulacrum)
 
 # install the exported targets
-install(EXPORT random-walkTargets
-        FILE random-walkTargets.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/random-walk
-        NAMESPACE pcg::)
+install(EXPORT simulacrum-targets
+        FILE simulacrum-targets.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simulacrum
+        NAMESPACE sim::)
 
-# install the generated files
+# install the config files
 install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/random-walkConfig.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/random-walkConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/random-walk)
+        ${CMAKE_CURRENT_BINARY_DIR}/simulacrum-config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/simulacrum-config-version.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simulacrum)
 
-# install the include files
+# install the header files
 install(DIRECTORY src/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILES_MATCHING PATTERN "*.${random-walk_SRCEXT}")
+        FILES_MATCHING PATTERN "*.${simulacrum_SRCEXT}")
 
-export(PACKAGE random-walk)
+export(PACKAGE simulacrum)
