@@ -12,7 +12,7 @@
 #include <iostream>
 
 namespace ranges = std::ranges;
-namespace cardinal = simulacrum::cardinal;
+namespace sim = simulacrum;
 
 struct random_engine {
     // I think this is a bug - gcc requires there to be a result_type
@@ -50,10 +50,9 @@ int main()
 
     constexpr std::uint32_t N = 10;
     std::array<glm::ivec2, N> points;
-
     glm::ivec2 const origin(0, 0);
-    cardinal::walker homer(origin);
 
-    ranges::generate(points, cardinal::uniform_walk(rng, homer));
+    using cardinal = sp::direction::cardinal;
+    ranges::generate(points, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print);
 }

@@ -15,7 +15,7 @@
 // i/o
 #include <iostream>
 
-namespace cardinal = simulacrum::cardinal;
+namespace sim = simulacrum;
 namespace ranges = std::ranges;
 
 auto as_pixel(std::uint32_t pixel_size)
@@ -61,15 +61,14 @@ int main(int argc, char * argv[])
     // simulate the random walk
     std::random_device seed;
     std::mt19937 rng(seed());
-
     sf::Vector2i const start(width/(2*pixel_size), height/(2*pixel_size));
-    cardinal::walker homer(start);
 
     std::vector<sf::Vector2i> points;
     points.reserve(N);
-
     auto into_points = std::back_inserter(points);
-    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
+
+    using cardinal = sp::direction::cardinal;
+    ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, start));
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(width, height), "random-walk");
@@ -84,6 +83,7 @@ int main(int argc, char * argv[])
     ranges::for_each(pixels, draw_pixel(window));
     window.display();
 
+    // busy loop until the user quits
     while (window.isOpen()) {
         sf::Event event;
 

@@ -1,14 +1,17 @@
 // math and algorithms
 #include <simulacrum/random_walks.hpp>
 #include <random>
-#include <ranges>
+#include <algorithm>
+
+// data structures
+#include <vector>
 
 // i/o
 #include <iostream>
 
 // aliases and namespaces
 namespace ranges = std::ranges;
-namespace cardinal = simulacrum::cardinal;
+namespace sim = simulacrum;
 
 struct point{ int x; int y; };
 point operator+(point const & p, point const & q) { return { p.x + q.x, p.y + q.y }; }
@@ -41,9 +44,7 @@ int main(int argc, char * argv[])
     // resources for the walk
     std::random_device seed;
     std::mt19937 rng(seed());
-
     point const origin(0, 0);
-    cardinal::walker homer(origin);
 
     // points will be written from the walk into this point set
     std::vector<point> points;
@@ -51,7 +52,8 @@ int main(int argc, char * argv[])
     auto into_points = std::back_inserter(points);
 
     // perform walk then print points
-    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
+    using cardinal = sp::direction::cardinal;
+    ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print);
     return EXIT_SUCCESS;
 }
