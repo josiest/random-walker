@@ -13,15 +13,16 @@ A modern library for procedural content generation
 #include <random>
 #include <algorithm>
 
-// data types
+// data types and type constraints
 #include <glm/glm.hpp>
 #include <cstdint>
+#include <spatula/geometry.hpp>
 
 // i/o
 #include <iostream>
 
 namespace ranges = std::ranges;
-namespace cardinal = simulacrum::cardinal;
+namespace sim = simulacrum;
 
 void print_point(glm::ivec2 const & p)
 {
@@ -35,19 +36,17 @@ int main()
     // we'll need to make our own random engine
     std::random_device seed;
     std::mt19937 rng(seed());
-
-    // start at the origin of the grid
     glm::ivec2 const origin(0, 0);
-    cardinal::walker homer(origin);
 
     // reserve enough space for all the points
     std::uint32_t const N = 5;
     std::vector<glm::ivec2> points;
     points.reserve(N);
+    auto into_points = std::back_inserter(points);
 
     // -- perform the simulation --
-    auto into_points = std::back_inserter(points);
-    ranges::generate_n(into_points, N, cardinal::uniform_walk(rng, homer));
+    using cardinal = sp::direction::cardinal;
+    ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print_point);
 }
 ```
@@ -92,86 +91,70 @@ target_link_libraries(<target> INTERFACE sim::simulacrom)
 # Documentation
 
 ## Overview
-- [class walker](#class-walker)
-    - [constructors](#walker-constructors)
-    - [`walker::position()`](#walkerposition)
-    - [`walker::step()`](#walkerstep)
-- [simulation](#simulation)
-    - [`cardinal::uniform_walk(rng, start)`](#cardinaluniform_walkrng-start)
-
-## class walker
-An abstract data type for simulating random walks.
-
-### Signature
-```cpp
-template<sp::vector2 Vector> class walker;
-```
-
-## walker constructors
-
-```cpp
-/** Create a random walker at the origin. */
-template<sp::vector2 Vector>
-walker<Vector>::walker();
-
-/** create a random walker at a specific point. */
-template<sp::vector2 Vector>
-walker<Vector>::walker(int x, int y);
-template<sp::vector2 Vector>              // prefer this constructor for
-walker<Vector>::walker(Vector const & p); // type-deduction
-```
-
-### Examples
-```cpp
-#include <SFML/System.hpp>
-#include <simulacrum/random_walks.hpp>
-using namespace simulacrum;
-
-// ...
-
-walker<sf::Vector2i> w1;            // walker at the origin
-walker<sf::Vector2i> w2(100, 100);  // walker at (100, 100)
-
-sf::Vector2i const start(100, 100);
-walker w3(start);                   // walker at (100, 100)
-```
-
-## walker methods
-
-## walker::position()
-The walker's current position
-
-### Signature
-```cpp
-template<sp::vector2 Vector>
-Vector const & walker<Vector>::postion() const;
-```
-
-## walker::step()
-Step the walker by one unit in the given direction.
-
-### Signature
-```cpp
-template<vector2 Vector>
-Vector const & walker<Vector>::step(cardinal::direction_name direction);
-```
-
-### Return
-The walker's position after stepping.
-
-### Parameters
-- `direction` the cardinal direction to walk in
-
+- [`random_walk(rng, start, distribution`](#random_walkrng-start-sample_space)
+- [`uniform_walk(rng, start)`](#uniform_walkrng-start)
 
 ## simulation
 
-## cardinal::uniform_walk(rng, start)
-Make a function that generates points in a uniform-random walk.
+## random_walk(rng, start, sample_space)
+Simulate a random walk.
+
+### Signature
+```cpp
+template<sp::ranged_enum Direction,
+         std::uniform_random_bit_generator Engine,
+         sp::vector2 Vector,
+         class Distribution>
+
+class random_walk {
+public:
+    random_walk(Engine & rng, Vector const & start,
+                Distribution const & sample_space);
+    Vector operator()();
+};
+```
+
+### Return
+A function object that takes no arguments and advances the walk's position,
+returning the previous position.
+
+### Parameters
+- `rng` the random number generator
+- `start` the starting position of the walk
+- `sample_space` the direction distribution to use when walking
+
+### Examples
+```cpp
+#include <random>
+#include <SFML/System.hpp>
+#include <spatula/geometry.hpp>
+#include <simulacrum/random_walks.hpp>
+// ...
+
+std::random_device seed;
+std::mt19937 rng(seed());
+sf::Vector2i const start(100, 100);
+
+using direction_distribution = std::discrete_distribution<std::uint32_t>;
+direction_distribution sample_direction{3, 2, 1, 1};
+
+std::uint32_t const N = 100;
+std::vector<sf::Vector2i> points;
+points.reserve(N);
+
+auto into_points = std::back_inserter(points);
+using cardinal = sp::direction::cardinal;
+ranges::generate_n(into_points, N,
+                   sim::random_walk<cardinal>(rng, start, sample_direction));
+```
+
+## uniform_walk(rng, start)
+Simulate a uniform random walk
 
 ### Signature
 ```cpp
 template<std::uniform_random_bit_generator Engine, sp::vector2 Vector>
-auto cardinal::uniform_walk(Engine & rng, Vector const & start);
+auto uniform_walk(Engine & rng, Vector const & start);
 ```
 
 ### Return
@@ -186,15 +169,18 @@ direction (North, East, South, West).
 ### Examples
 ```cpp
 #include <glm/glm.hpp>
+#include <spatula/geometry.hpp>
 #include <simulacrum/random_walks.hpp>
-namespace cardinal = simulacrum::cardinal;
+
+namespace sim = simulacrum;
 
 // ...
 
 std::random_device seed;
 std::mt19937 rng(seed());
-
 glm::ivec2 const origin(0, 0);
+
 std::array<glm::ivec2, 10> points;
-ranges::generate(points, cardinal::uniform_walk(rng, origin));
+using cardinal = sp::direction::cardinal;
+ranges::generate(points, sim::uniform_walk<cardinal>(rng, origin));
 ```
