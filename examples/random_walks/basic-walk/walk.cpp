@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
     auto into_points = std::back_inserter(points);
 
     // perform walk then print points
-    using cardinal = sp::direction::cardinal;
+    using cardinal = sp::cardinal::direction_name;
     ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print);
     return EXIT_SUCCESS;

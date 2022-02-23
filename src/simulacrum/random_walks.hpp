@@ -35,7 +35,7 @@ public:
 
         // sample a random direction and walk
         auto const direction = static_cast<Direction>(_sample_direction(_rng));
-        sp::direction_as<Direction, Vector> to_vector;
+        sp::direction_as<Vector, Direction> to_vector;
         _position = _position + to_vector(direction);
 
         return old_position;

@@ -52,7 +52,7 @@ int main()
     std::array<glm::ivec2, N> points;
     glm::ivec2 const origin(0, 0);
 
-    using cardinal = sp::direction::cardinal;
+    using cardinal = sp::cardinal::direction_name;
     ranges::generate(points, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print);
 }

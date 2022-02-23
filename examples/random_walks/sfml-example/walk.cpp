@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
     points.reserve(N);
     auto into_points = std::back_inserter(points);
 
-    using cardinal = sp::direction::cardinal;
+    using cardinal = sp::cardinal::direction_name;
     ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, start));
 
     // create the window
