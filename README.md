@@ -158,9 +158,8 @@ auto uniform_walk(Engine & rng, Vector const & start);
 ```
 
 ### Return
-A function that takes no arguments and returns a 2d point that's one step away
-from the last point generated in a uniformly-distributed random cardinal
-direction (North, East, South, West).
+A `random_walk` function object with a `std::uniform_int_distribution` as its
+sample space.
 
 ### Parameters
 - `rng` the random number generator to sample from
