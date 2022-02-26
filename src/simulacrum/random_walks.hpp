@@ -14,7 +14,7 @@ namespace simulacrum {
  */
 template<sp::ranged_enum Direction,
          std::uniform_random_bit_generator Engine,
-         sp::vector2 Vector,
+         sp::vector Vector,
          class Distribution>
 
 class random_walk {
@@ -53,7 +53,7 @@ private:
  */
 template<sp::ranged_enum Direction,
          std::uniform_random_bit_generator Engine,
-         sp::vector2 Vector>
+         sp::vector Vector>
          
 auto uniform_walk(Engine & rng, Vector start)
 {
