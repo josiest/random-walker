@@ -91,7 +91,7 @@ target_link_libraries(<target> INTERFACE sim::simulacrom)
 # Documentation
 
 ## Overview
-- [`random_walk(rng, start, distribution`](#random_walkrng-start-sample_space)
+- [`random_walk(rng, start, sample_space)`](#random_walkrng-start-sample_space)
 - [`uniform_walk(rng, start)`](#uniform_walkrng-start)
 
 ## simulation
@@ -101,9 +101,10 @@ Simulate a random walk.
 
 ### Signature
 ```cpp
+namespace simulacrum {
 template<sp::ranged_enum Direction,
          std::uniform_random_bit_generator Engine,
-         sp::vector2 Vector,
+         sp::vector Vector,
          class Distribution>
 
 class random_walk {
@@ -112,6 +113,7 @@ public:
                 Distribution const & sample_space);
     Vector operator()();
 };
+}
 ```
 
 ### Return
@@ -146,6 +148,7 @@ auto into_points = std::back_inserter(points);
 using cardinal = sp::direction::cardinal;
 ranges::generate_n(into_points, N,
                    sim::random_walk<cardinal>(rng, start, sample_direction));
+// ...
 ```
 
 ## uniform_walk(rng, start)
@@ -153,8 +156,10 @@ Simulate a uniform random walk
 
 ### Signature
 ```cpp
+namespace simulacrum {
 template<std::uniform_random_bit_generator Engine, sp::vector2 Vector>
 auto uniform_walk(Engine & rng, Vector const & start);
+}
 ```
 
 ### Return
@@ -172,7 +177,6 @@ sample space.
 #include <simulacrum/random_walks.hpp>
 
 namespace sim = simulacrum;
-
 // ...
 
 std::random_device seed;
@@ -180,6 +184,7 @@ std::mt19937 rng(seed());
 glm::ivec2 const origin(0, 0);
 
 std::array<glm::ivec2, 10> points;
-using cardinal = sp::direction::cardinal;
+using cardinal = sp::cardinal::direction_name;
 ranges::generate(points, sim::uniform_walk<cardinal>(rng, origin));
+// ...
 ```
