@@ -1,41 +1,42 @@
 #pragma once
 
-// data structures and abstract data types
-#include <spatula/geometry.hpp>
-#include "simulacrum/marching_squares/contours.hpp"
+// data types and data structures
+#include <cstddef>
 #include <vector>
 
-// algorithms
+// type constraints
+#include <spatula/geometry.hpp>
+#include <iterator>
+#include <ranges>
+
+// math and algorithms
+#include "simulacrum/marching_squares/contours.hpp"
 #include <algorithm>
 #include <numeric>
 
 namespace simulacrum::marching_squares {
 
-/** An output iterator that writes unsigned integers. */
-template<class Inserter>
-concept unsigned_inserter = requires
-     std::weakly_incrementable<Inserter> and
-     std::unsigned_integral<std::iter_value_t<Inserter>> and
-     std::indirectly_writable<Inserter, std::iter_value_t<Inserter>>;
+namespace views = std::views;
 
 // return a function that offsets a vertex by a constant offset
-template<sp::vector2 Vector>
-Vector offset_by_vector(Vector const && lower_left)
+template<sp::semi_vector2 Vector>
+auto offset_by_vector(Vector const & offset)
 {
-    return [&lower_left](Vector && cell_vertex) {
-        return lower_left + cell_vertex;
+    return [&offset](Vector const & v) {
+        return Vector(v.x + offset.x, v.y + offset.y);
     };
 }
 
 // return a function that inserts cell vertices into a mesh
-template<sp::vector2_inserter VertexInserter>
-void triangulate_cell(VertexInserter into_verts)
-{
-    using Vertex = std::iter_value_t<VertexInserter>;
-    using VertexMapping = std::pair<Vertex, cell::mask>;
-    return [into_verts](VertexMapping const & pair) {
+template<sp::semi_vector2 Vertex, std::weakly_incrementable VertexInserter>
+    requires std::indirectly_writable<VertexInserter, Vertex>
 
-        auto const &[lower_left, mask] = pair;
+auto triangulate_cell(VertexInserter into_verts)
+{
+    using VertexMapping = std::pair<Vertex, cell::mask>;
+    return [into_verts](VertexMapping const & mapping) {
+
+        auto const &[lower_left, mask] = mapping;
         auto const & contour = cell::contour_as<Vertex>(mask);
 
         // insert each vertex in the cell offset by the current lower-left
@@ -55,14 +56,23 @@ void triangulate_cell(VertexInserter into_verts)
  *   verts will be filled in triangle-fan order with indices and counts as
  *   specified by glMultiDrawArrays
  */
-template<sp::vector2_irange PointRange, unsigned_inserter IndexInserter,
-         unsigned_inserter CountInserter, sp::vector2_inserter VertexInserter>
+template<sp::semi_vector2 Vertex,
+         ranges::input_range PointRange,
+         std::weakly_incrementable IndexInserter,
+         std::weakly_incrementable CountInserter,
+         std::weakly_incrementable VertexInserter>
+
+    requires sp::semi_vector2<ranges::range_value_t<PointRange>> and
+             std::indirectly_writable<IndexInserter, std::size_t> and
+             std::indirectly_writable<CountInserter, std::size_t> and
+             std::indirectly_writable<VertexInserter, Vertex>
 
 void triangulate(PointRange && points, IndexInserter into_indices,
                  CountInserter into_counts, VertexInserter into_verts)
 {
     // alias some useful types
-    using Vertex = std::iter_value_t<VertexInserter>;
+    using Point = ranges::range_value_t<PointRange>;
+    using PointMapping = std::pair<Point, cell::mask>;
     using VertexMapping = std::pair<Vertex, cell::mask>;
 
     // a temporary list of vertex-mask pairs for reference
@@ -70,27 +80,27 @@ void triangulate(PointRange && points, IndexInserter into_indices,
     vertex_map.reserve(ranges::size(points));
     auto into_vertex_map = std::back_inserter(vertex_map);
 
-    auto as_vertex_mapping = [](auto const & pair) {
+    auto as_vertex_mapping = [](PointMapping const & pair) {
         return std::make_pair(static_cast<Vertex>(pair.first), pair.second);
-    }
-    ranges::transform(points, into_vertex_map,
-                      cell::count_corners(points), as_vertex_mapping);
+    };
+    ranges::transform(points, into_vertex_map, as_vertex_mapping,
+                      cell::count_corners(points));
 
     // temporary list of vertex counts for reference
     std::vector<std::uint32_t> cell_counts;
     cell_counts.reserve(ranges::size(points));
-    auto into_cell_counts = std::back_inserter(counts);
+    auto into_cell_counts = std::back_inserter(cell_counts);
 
-    ranges::transform(vertex_map, into_cell_counts,
-                      &VertexMapping::second, &cell::mask::count);
+    ranges::transform(vertex_map, into_cell_counts, &cell::mask::count,
+                      &VertexMapping::second);
 
-    // get the mesh-cell indices with their vertex counts
+    // generate the mesh-cell indices and their vertex counts
     std::exclusive_scan(cell_counts.begin(), cell_counts.end(),
                         into_indices, 0);
     ranges::copy(cell_counts, into_counts);
 
     // compute the vertices
-    ranges::for_each(vertex_map, triangulate_cell(into_verts));
+    ranges::for_each(vertex_map, triangulate_cell<Vertex>(into_verts));
 }
 
 }
