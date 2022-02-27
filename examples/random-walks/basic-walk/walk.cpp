@@ -14,7 +14,10 @@ namespace ranges = std::ranges;
 namespace sim = simulacrum;
 
 struct point{ int x; int y; };
+// define the operations required for vector-closure
 point operator+(point const & p, point const & q) { return { p.x + q.x, p.y + q.y }; }
+point operator-(point const & p, point const & q) { return { p.x - q.x, p.y - q.y }; }
+point operator*(int c, point const & p) { return { c * p.x, c * p.y }; }
 bool operator==(point const & p, point const & q) { return p.x == q.x and p.y == q.y; }
 
 void print(point const & p)
