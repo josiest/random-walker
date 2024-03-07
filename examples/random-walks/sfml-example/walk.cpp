@@ -1,10 +1,9 @@
 // frameworks
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <simulacrum/random_walks.hpp>
+#include "simulacrum/random_walks.hpp"
 
 // data types and data structures
-#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -18,13 +17,14 @@
 namespace sim = simulacrum;
 namespace ranges = std::ranges;
 
-auto as_pixel(std::uint32_t pixel_size)
+auto as_pixel(std::uint8_t pixel_size)
 {
     return [pixel_size](sf::Vector2i const & point) {
 
         sf::RectangleShape pixel;
         pixel.setSize(sf::Vector2f(pixel_size, pixel_size));
-        pixel.setPosition(point.x*pixel_size, point.y*pixel_size);
+        pixel.setPosition(static_cast<float>(point.x*pixel_size),
+                          static_cast<float>(point.y*pixel_size));
         pixel.setFillColor(sf::Color::Black);
         return pixel;
     };
@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
     if (argc == 2) { try {
         N = std::stoi(argv[1]);
     }
-    // fail if any error occured while converting th N-argument to int
+    // fail if any error occurred while converting th N-argument to int
     catch (...) {
         std::cout << "couldn't convert \"" << argv[1] << "\" to int" << std::endl;
         return EXIT_FAILURE;
@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
     auto into_points = std::back_inserter(points);
 
     using cardinal = sp::cardinal::direction_name;
-    ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, start));
+    std::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, start));
 
     // create the window
     sf::RenderWindow window(sf::VideoMode(width, height), "random-walk");
@@ -79,13 +79,18 @@ int main(int argc, char * argv[])
     auto into_pixels = std::back_inserter(pixels);
 
     window.clear(sf::Color::White);
+#ifdef __cpp_lib_ranges
     ranges::transform(points, into_pixels, as_pixel(pixel_size));
     ranges::for_each(pixels, draw_pixel(window));
+#else
+    std::transform(points.begin(), points.end(), into_pixels, as_pixel(pixel_size));
+    std::for_each(pixels.begin(), pixels.end(), draw_pixel(window));
+#endif
     window.display();
 
     // busy loop until the user quits
     while (window.isOpen()) {
-        sf::Event event;
+        sf::Event event{};
 
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {

@@ -70,6 +70,13 @@ _deps
 
 # -- Project --
 build/
+include/spatula/
+include/spatula_extensions
+lib/
+
+# -- Intellij --
+.idea/
+cmake-build-debug/
 
 # -- Visual Studio Code --
 .vscode/*

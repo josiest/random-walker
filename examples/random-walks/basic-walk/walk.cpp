@@ -10,7 +10,6 @@
 #include <iostream>
 
 // aliases and namespaces
-namespace ranges = std::ranges;
 namespace sim = simulacrum;
 
 struct point{ int x; int y; };
@@ -44,7 +43,7 @@ int main(int argc, char * argv[])
     // resources for the walk
     std::random_device seed;
     std::mt19937 rng(seed());
-    point const origin(0, 0);
+    point const origin{0, 0};
 
     // points will be written from the walk into this point set
     std::vector<point> points;
@@ -53,7 +52,13 @@ int main(int argc, char * argv[])
 
     // perform walk then print points
     using cardinal = sp::cardinal::direction_name;
+#ifdef __cpp_lib_ranges
+    namespace ranges = std::ranges;
     ranges::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, origin));
     ranges::for_each(points, print);
+#else
+    std::generate_n(into_points, N, sim::uniform_walk<cardinal>(rng, origin));
+    std::for_each(points.begin(), points.end(), print);
+#endif
     return EXIT_SUCCESS;
 }

@@ -1,0 +1,3 @@
+[submodule "spatula"]
+	path = spatula
+	url = git@github.com:josiest/spatula.git

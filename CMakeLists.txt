@@ -19,8 +19,8 @@ set_target_properties(simulacrum PROPERTIES
     CXX_STANDARD_REQUIRED true)
 
 # link required external libraries
-find_package(spatula REQUIRED)
-target_link_libraries(simulacrum INTERFACE sp::spatula)
+# find_package(spatula REQUIRED)
+# target_link_libraries(simulacrum INTERFACE sp::spatula)
 
 # add test sub-directory if specified
 option(run_tests "Run tests" off)
