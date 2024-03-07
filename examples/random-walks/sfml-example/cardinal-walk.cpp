@@ -37,7 +37,6 @@ auto draw_pixel(sf::RenderWindow & window)
 
 int main(int argc, char * argv[])
 {
-    // do the random walk
     std::uint32_t N = 100;
     if (argc == 2) { try {
         N = std::stoi(argv[1]);
