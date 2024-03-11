@@ -1,3 +1,6 @@
 [submodule "spatula"]
 	path = spatula
 	url = git@github.com:josiest/spatula.git
+[submodule "tess"]
+	path = tess
+	url = git@github.com:josiest/tess.git
