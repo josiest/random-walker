@@ -66,19 +66,11 @@ int main()
 
     std::vector<sf::ConvexShape> shapes;
     shapes.reserve(hexes.size());
-    for (const auto& hex : hexes) {
-        auto& shape = shapes.emplace_back(hex_shape(basis, hex));
-        std::cout << "(" << hex.q << ", " << hex.r << ")\n";
+    auto& origin = shapes.emplace_back(hex_shape(basis, hexes.front()));
+    origin.setFillColor(sf::Color::Cyan);
+    origin.setOutlineThickness(1.f);
+    origin.setOutlineColor(sf::Color::White);
 
-        if (hex == tess::hex<int>::zero) {
-            shape.setFillColor(sf::Color::Cyan);
-        }
-        else {
-            shape.setFillColor(sf::Color::Black);
-        }
-        shape.setOutlineColor(sf::Color::White);
-        shape.setOutlineThickness(1.0f);
-    }
     sf::RenderWindow window{ settings.video_mode, settings.window_name };
 
     // busy loop until the user quits
@@ -88,6 +80,20 @@ int main()
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (shapes.size() < hexes.size()) {
+                        auto& current_shape = shapes.back();
+                        current_shape.setFillColor(sf::Color::Black);
+
+                        const auto& next_hex = hexes[shapes.size()];
+                        auto& next_shape = shapes.emplace_back(hex_shape(basis, next_hex));
+                        next_shape.setFillColor(sf::Color::Cyan);
+                        next_shape.setOutlineThickness(1.f);
+                        next_shape.setOutlineColor(sf::Color::White);
+                    }
+                }
             }
         }
 
