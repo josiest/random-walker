@@ -82,6 +82,7 @@ int main()
                 window.close();
             }
             if (event.type == sf::Event::MouseButtonReleased) {
+                // click to advance the walk
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     if (shapes.size() < hexes.size()) {
                         auto& current_shape = shapes.back();
